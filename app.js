@@ -1,22 +1,19 @@
-const http = require("http")
-const fs = require('fs')
+const express = require("express")
 require("./consts")
 
-http.createServer(async (req, res) => {
-  if (req.url === "/user") {
-    const buffers = []
+const app = express()
 
-    for await (const chunk of req) {
-      buffers.push(chunk)
-    }
+app.get('/', (req, res) => {
+  res.send("<h1>Home Page</h1>")
+})
 
-    const user = JSON.parse(buffers.toString())
-    console.log(user.name, '-', user.age)
+app.get('/about', (req, res) => {
+  res.send("<h1>About Page</h1>")
+})
 
-    res.end("Data successfully gets")
-  } else {
-    fs.readFile("./index.html", (err, data) => {
-      res.end(data)
-    })
-  }
-}).listen(globalThis.PORT, () => console.log(`Server is working on PORT ${globalThis.PORT}`))
+app.get('/contacts', (req, res) => {
+  res.send("<h1>Contacts Page</h1>")
+})
+
+
+app.listen(globalThis.PORT, () => console.log(`Server is working at adress http://localhost:${globalThis.PORT}`))
