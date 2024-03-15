@@ -1,19 +1,29 @@
 const express = require("express")
+const fs = require("fs")
 require("./consts")
 
 const app = express()
 
-app.get('/', (req, res) => {
-  res.send("<h1>Home Page</h1>")
+app.use((req, res, next) => {
+  const now = new Date()
+  const hour = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  const data = `${hour}:${minutes}:${seconds} ${req.method} ${req.url}`;
+
+  console.log(data)
+
+  fs.appendFile('server.log', data + '\n', (err) => {
+    if (err) {
+      console.log(err)
+    }
+  })
+  next()
 })
 
-app.get('/about', (req, res) => {
-  res.send("<h1>About Page</h1>")
-})
-
-app.get('/contacts', (req, res) => {
-  res.send("<h1>Contacts Page</h1>")
+app.get("/", (req, res) => {
+  res.send("Home Page")
 })
 
 
-app.listen(globalThis.PORT, () => console.log(`Server is working at adress http://localhost:${globalThis.PORT}`))
+app.listen(globalThis.PORT, () => console.log(`Server is wokring at adress http://localhost:${globalThis.PORT}`))
