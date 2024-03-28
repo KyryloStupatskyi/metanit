@@ -5,7 +5,11 @@ const app = express()
 
 app.use("/static", express.static("public"))
 
-app.use('/', (req, res) => {
+app.get('/abo*ut', (req, res) => {
+  res.send("<h1>About Page</h1>")
+})
+
+app.get('/', (req, res) => {
   res.send("<h1>Main Page</h1>")
 })
 
