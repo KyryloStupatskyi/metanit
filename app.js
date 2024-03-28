@@ -5,20 +5,29 @@ const app = express()
 
 app.use("/static", express.static("public"))
 
-// app.use("/home", (req, res) => {
-//   res.redirect("https://metanit.com")
-// })
+app.get("/", function (req, res) {
+  res.send("<h1>Главная страница</h1>");
+});
 
-app.get("/someRoute", (req, res) => {
-  res.redirect("about")
+app.get('/about', (req, res) => {
+  const { name } = req.query
+
+  let resText = "<ul>"
+
+  for (item of name) {
+    resText += `<li>${item}</li>`
+  }
+
+  resText += "</ul>"
+
+  return res.send(resText)
 })
 
-app.get("/about", (req, res) => {
-  res.send("<h1>About Page</h1>")
-})
+app.get("/info", (req, res) => {
+  console.log(req.query)
+  const { user } = req.query
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html")
+  res.send(`Hello, my name is ${user.name} and im ${user.age}`)
 })
 
 app.listen(globalThis.PORT, () => console.log(`Server is Working at adress http://localhost:${globalThis.PORT}`))
