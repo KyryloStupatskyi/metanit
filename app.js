@@ -1,22 +1,24 @@
-const http = require("http")
-const fs = require('fs')
+const express = require("express")
 require("./consts")
 
-http.createServer(async (req, res) => {
-  if (req.url === "/user") {
-    const buffers = []
+const app = express()
 
-    for await (const chunk of req) {
-      buffers.push(chunk)
-    }
+app.use("/static", express.static("public"))
 
-    const user = JSON.parse(buffers.toString())
-    console.log(user.name, '-', user.age)
+// app.use("/home", (req, res) => {
+//   res.redirect("https://metanit.com")
+// })
 
-    res.end("Data successfully gets")
-  } else {
-    fs.readFile("./index.html", (err, data) => {
-      res.end(data)
-    })
-  }
-}).listen(globalThis.PORT, () => console.log(`Server is working on PORT ${globalThis.PORT}`))
+app.get("/someRoute", (req, res) => {
+  res.redirect("about")
+})
+
+app.get("/about", (req, res) => {
+  res.send("<h1>About Page</h1>")
+})
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html")
+})
+
+app.listen(globalThis.PORT, () => console.log(`Server is Working at adress http://localhost:${globalThis.PORT}`))
